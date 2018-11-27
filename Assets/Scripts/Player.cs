@@ -6,15 +6,15 @@ public class Player : MonoBehaviour
 {
 
     public int Life;
-    public int MovementSpeed;
+    public float MovementSpeed;
     public int Coins;
-    public int JumpForce;
+    public float JumpForce;
     public bool isGrounded;
     public Rigidbody rb;
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        // rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -28,18 +28,21 @@ public class Player : MonoBehaviour
     /// </summary>
     public void CheckInput()
     {
-
-        if (Input.GetKey(KeyCode.A))
-        {
+        // Movimento laterale
+        if (Input.GetKey(KeyCode.A) == true)
+        { // SX
             transform.position = transform.position + new Vector3(-MovementSpeed, 0f, 0f);
         }
         if (Input.GetKey(KeyCode.D))
-        {
+        { // DX
             transform.position = transform.position + new Vector3(+MovementSpeed, 0f, 0f);
         }
-        if (Input.GetKey(KeyCode.W) && isGrounded == true)
+
+        // Salto
+        if (Input.GetKeyDown(KeyCode.W) == true && isGrounded == true)
         {
-            transform.position = transform.position + new Vector3(0f, JumpForce *Time.deltaTime, 0f);
+            rb.AddForce(new Vector3(0, JumpForce, 0));
+            // transform.position = transform.position + new Vector3(0f, JumpForce * Time.deltaTime, 0f);
             isGrounded = false;
         }
         if (Input.GetKey(KeyCode.S))
@@ -51,11 +54,11 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.other.tag == "Plane")
-        {
+        //if (collision.other.tag == "Plane")
+        //{
             isGrounded = true;
             Debug.Log("collide");
-        }
+        //}
     }
 
 }
