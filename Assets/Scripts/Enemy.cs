@@ -9,26 +9,23 @@ public class Enemy : MonoBehaviour {
     public float MoveSpeed = 1.4f;
     private bool IsAlive = false;
 
-	// Use this for initialization
-	private void Start () {
-        bool printResult = PrintString("Start enemy");
-        Debug.Log("Print result: " + printResult);
-    }
-
-    // Update is called once per frame
-    private void Update () {
-        string tempString = "Update enemy";
-        PrintString(tempString);
-    }
-
-    private bool PrintString(string stringToPrint) {
-        if (EnemyName == "") {
-            return false;
-        } else {
-            Debug.Log(stringToPrint + " : " + EnemyName);
-            return true;
+    /// <summary>
+    /// Funzione che arreca danno alla vita del nemico.
+    /// </summary>
+    /// <param name="amount">Ammontare del danno inflitto.</param>
+    public void Damage(int amount) {
+        Life -= amount;
+        if (Life <= 0) {
+            KillMe();
         }
-
     }
 
+    /// <summary>
+    /// Comportamento di morte.
+    /// </summary>
+    private void KillMe() {
+        foreach (Collider collider in GetComponentsInChildren<Collider>()) {
+            collider.enabled = false;
+        }
+    }
 }

@@ -2,25 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
-{
+public class Player : MonoBehaviour {
 
-    public int Life;
+    public  int Life;
     public float MovementSpeed;
     public int Coins;
     public float JumpForce;
     public bool isGrounded;
     public Rigidbody rb;
 
-    private void Start()
-    {
-        // rb = GetComponent<Rigidbody>();
-    }
-
     // Update is called once per frame
     void Update()
     {
-        CheckInput();
+        if (Life > 0) {
+            CheckInput();
+        }
     }
 
     /// <summary>
@@ -57,8 +53,19 @@ public class Player : MonoBehaviour
         //if (collision.other.tag == "Plane")
         //{
             isGrounded = true;
-            Debug.Log("collide");
+            //Debug.Log("collide");
         //}
     }
 
+    public void Damage(int amount) {
+        Life -= amount;
+        if (Life <= 0)
+            killMe();
+    }
+
+    private void killMe() {
+        foreach (Collider collider in GetComponentsInChildren<Collider>()) {
+            collider.enabled = false;
+        }
+    }
 }
