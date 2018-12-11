@@ -9,7 +9,10 @@ public class Player : MonoBehaviour {
     public int Coins;
     public float JumpForce;
     public bool isGrounded;
-    public Rigidbody rb;
+    public Rigidbody2D rb;
+    public Animator anim;
+
+    bool isAlive = true;
 
     // Update is called once per frame
     void Update()
@@ -24,20 +27,27 @@ public class Player : MonoBehaviour {
     /// </summary>
     public void CheckInput()
     {
-        // Movimento laterale
-        if (Input.GetKey(KeyCode.A) == true)
-        { // SX
-            transform.position = transform.position + new Vector3(-MovementSpeed, 0f, 0f);
+        if (isAlive == false) {
+            return;
         }
-        if (Input.GetKey(KeyCode.D))
-        { // DX
+
+        // Movimento laterale
+        if (Input.GetKey(KeyCode.A) == true) { // SX
+            transform.position = transform.position + new Vector3(-MovementSpeed, 0f, 0f);
+            anim.SetBool("Idle", false);
+            anim.SetBool("LeftSide", true);
+        } else if (Input.GetKey(KeyCode.D)) { // DX
             transform.position = transform.position + new Vector3(+MovementSpeed, 0f, 0f);
+            anim.SetBool("Idle", false);
+            anim.SetBool("LeftSide", false);
+        } else {
+            anim.SetBool("Idle", true);
         }
 
         // Salto
         if (Input.GetKeyDown(KeyCode.W) == true && isGrounded == true)
         {
-            rb.AddForce(new Vector3(0, JumpForce, 0));
+            rb.AddForce(new Vector2(0, JumpForce));
             // transform.position = transform.position + new Vector3(0f, JumpForce * Time.deltaTime, 0f);
             isGrounded = false;
         }
@@ -48,12 +58,11 @@ public class Player : MonoBehaviour {
 
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
+    private void OnCollisionEnter2D(Collision2D collision) {
         //if (collision.other.tag == "Plane")
         //{
-            isGrounded = true;
-            //Debug.Log("collide");
+        isGrounded = true;
+        //Debug.Log("collide");
         //}
     }
 
@@ -67,5 +76,7 @@ public class Player : MonoBehaviour {
         foreach (Collider collider in GetComponentsInChildren<Collider>()) {
             collider.enabled = false;
         }
+        isAlive = false;
+        anim.SetTrigger("Death");
     }
 }
