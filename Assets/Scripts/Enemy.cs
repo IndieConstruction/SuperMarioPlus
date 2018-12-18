@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour {
     /// Comportamento di morte.
     /// </summary>
     private void KillMe() {
-        foreach (Collider collider in GetComponentsInChildren<Collider>()) {
+        foreach (Collider2D collider in GetComponentsInChildren<Collider2D>()) {
             collider.enabled = false;
         }
     }
